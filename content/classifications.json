@@ -1,0 +1,105 @@
+{
+  "ccf_catalog": "2026（第七版）",
+  "domestic_catalog": "2025",
+  "checked_on": "2026-09-12",
+  "papers": [
+    {
+      "id": "kang2024",
+      "ccf_rank": "T1",
+      "ccf_source": "https://www.ccf.org.cn/ccftjgjxskwml/"
+    },
+    {
+      "id": "HuangHeYan2024",
+      "ccf_rank": "T2",
+      "ccf_source": "https://www.ccf.org.cn/ccftjgjxskwml/"
+    },
+    {
+      "id": "li2025",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "tian_beyond_2026",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "lan_peap_2026",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "cheng_mem2evolve_2026",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "yao2025",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "yao2026",
+      "ccf_rank": "A",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "zeng2024",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "tian2025b",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "qiu_lifemem_2026",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "liu2023b",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+    },
+    {
+      "id": "xia_pmmtd_2026",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "indexing": "SCIE",
+      "indexing_source": "https://journal.hep.com.cn/fcs/EN/indexing"
+    },
+    {
+      "id": "lan_pestest_2026",
+      "ccf_rank": "B",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "indexing": "SCIE",
+      "indexing_source": "https://journal.hep.com.cn/fcs/EN/indexing"
+    },
+    {
+      "id": "lan2026",
+      "ccf_rank": "C",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "indexing": "SCIE",
+      "indexing_source": "https://mjl.clarivate.com/search-results?issn=0925-2312"
+    },
+    {
+      "id": "liu2026",
+      "ccf_rank": "C",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "indexing": "SCIE",
+      "indexing_source": "https://mjl.clarivate.com/search-results?issn=0925-2312"
+    },
+    {
+      "id": "huang_optimizing_2025",
+      "indexing": "ESCI",
+      "indexing_source": "https://www.sciengine.com/DI/aboutus?scroll=section_3"
+    },
+    {
+      "id": "noauthor_enhancing_nodate",
+      "indexing": "ESCI",
+      "indexing_source": "https://www.sciengine.com/DI/aboutus?scroll=section_3"
+    }
+  ]
+}

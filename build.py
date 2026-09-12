@@ -98,6 +98,32 @@ def authorship_html(record):
     if not labels: return ''
     return f'<div class="role-tags" aria-label="{esc(SITE["name"])}的作者身份">' + ''.join(f'<span class="role-tag" title="{esc(note)}">{label}</span>' for label,note in labels) + '</div>'
 
+def classification_html(record):
+    status = CLASSIFICATIONS.get(record['id'], {})
+    labels = []
+    checked = CLASSIFICATION_DATA.get('checked_on')
+    checked_note = f'；核对于 {checked}' if checked else ''
+    rank = status.get('ccf_rank')
+    if rank:
+        domestic = rank.startswith('T')
+        catalog = CLASSIFICATION_DATA.get('domestic_catalog' if domestic else 'ccf_catalog')
+        note = 'CCF 高质量科技期刊分级目录' if domestic else 'CCF 推荐国际学术会议和期刊目录'
+        if catalog: note += f' {catalog}'
+        labels.append((f'CCF {rank}', note + checked_note, status.get('ccf_source')))
+    indexing = status.get('indexing')
+    if indexing:
+        note = f'期刊收录类别：{indexing}；期刊层面，不表示单篇论文已检索' + checked_note
+        labels.append((f'{indexing} 期刊', note, status.get('indexing_source')))
+    if not labels: return ''
+    tags = []
+    for label, note, source in labels:
+        attrs = f'class="classification-tag" title="{esc(note)}"'
+        if source:
+            tags.append(f'<a {attrs} href="{safe_url(source)}" target="_blank" rel="noopener noreferrer">{esc(label)} <span aria-hidden="true">↗</span></a>')
+        else:
+            tags.append(f'<span {attrs}>{esc(label)}</span>')
+    return '<div class="classification-tags" aria-label="CCF 分级与期刊收录类别">' + ''.join(tags) + '</div>'
+
 def venue(record):
     url = record.get('url', '')
     year = record.get('date', record.get('year', ''))[:4]
@@ -130,7 +156,7 @@ def paper(record, featured=False):
     full_html = f'<p class="paper-venue-full">{esc(full)}</p>' if not featured and full else ''
     status_html = '<p class="publication-status">已录用 · 待正式出版</p>' if plain(record.get('note', '')) == 'Accepted, to appear' else ''
     citation = '' if featured else f'<details class="citation"><summary>BibTeX 引用</summary><pre>{esc(bib_record(record))}</pre></details>'
-    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3><p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
+    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3>{classification_html(record)}<p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
 def frame(body, title, depth='', current='home', page_path=''):
     nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'teaching/data-structures/'), ('contact', '联系', depth+'index.html#contact')]
@@ -238,6 +264,8 @@ def build():
     if missing: raise ValueError('Unknown featured paper IDs: ' + ', '.join(sorted(missing)))
     missing_highlights = set(HIGHLIGHTS) - {record['id'] for record in records}
     if missing_highlights: raise ValueError('Unknown highlighted paper IDs: ' + ', '.join(sorted(missing_highlights)))
+    missing_classifications = set(CLASSIFICATIONS) - {record['id'] for record in records}
+    if missing_classifications: raise ValueError('Unknown classified paper IDs: ' + ', '.join(sorted(missing_classifications)))
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT/'assets', OUT/'assets', dirs_exist_ok=True)
     (OUT/'index.html').write_text(home(records))
@@ -270,4 +298,21 @@ for item_id in research_ids:
     if not re.fullmatch(r'[a-z][a-z0-9_-]*', item_id) or item_id in reserved_ids:
         raise ValueError(f'Invalid or reserved research ID: {item_id}')
 AUTHORSHIP = json.loads((CONTENT/'authorship.json').read_text())
+classification_path = CONTENT/'classifications.json'
+CLASSIFICATION_DATA = json.loads(classification_path.read_text()) if classification_path.exists() else {}
+CLASSIFICATIONS = {}
+for item in (CLASSIFICATION_DATA.get('papers') or []):
+    item_id = item.get('id')
+    if not isinstance(item_id, str) or not item_id: raise ValueError('Missing classified paper ID')
+    if item_id in CLASSIFICATIONS: raise ValueError(f'Duplicate classified paper ID: {item_id}')
+    for key, allowed in [('ccf_rank', {'A', 'B', 'C', 'T1', 'T2', 'T3'}), ('indexing', {'SCIE', 'ESCI'})]:
+        value = item.get(key)
+        if value not in (None, '') and (not isinstance(value, str) or value not in allowed):
+            raise ValueError(f'Invalid {key} for {item_id}: {value}')
+    for key in ('ccf_source', 'indexing_source'):
+        value = item.get(key)
+        if value not in (None, ''):
+            if not isinstance(value, str): raise ValueError(f'Invalid {key} for {item_id}')
+            safe_url(value)
+    CLASSIFICATIONS[item_id] = item
 if __name__ == '__main__': build()
