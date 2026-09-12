@@ -117,12 +117,14 @@ def paper(record, featured=False):
     title_html = f'<a href="{safe_url(url)}" target="_blank" rel="noopener noreferrer">{title}</a>' if url else title
     links = f'<a href="{safe_url(url)}" target="_blank" rel="noopener noreferrer">论文 <span aria-hidden="true">↗</span></a>' if url else ''
     extra = FEATURED.get(record['id'])
+    highlight = HIGHLIGHTS.get(record['id'])
+    highlight_html = f'<div class="paper-highlights"><span class="paper-highlight"><span aria-hidden="true">★</span> {esc(highlight)}</span></div>' if highlight else ''
     if extra and extra.get('url'): links += f'<a href="{safe_url(extra["url"])}" target="_blank" rel="noopener noreferrer">代码与数据 <span aria-hidden="true">↗</span></a>'
     summary = text_element('p', extra.get('summary'), ' class="pub-summary"') if featured and extra else ''
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
     full_html = f'<p class="paper-venue-full">{esc(full)}</p>' if not featured and full else ''
     citation = '' if featured else f'<details class="citation"><summary>BibTeX 引用</summary><pre>{esc(bib_record(record))}</pre></details>'
-    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body"><h3>{title_html}</h3><p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
+    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3><p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
 def frame(body, title, depth='', current='home', page_path=''):
     nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'teaching/data-structures/'), ('contact', '联系', depth+'index.html#contact')]
@@ -228,6 +230,8 @@ def build():
     if len({r['id'] for r in records}) != len(records): raise ValueError('Duplicate bibliography keys')
     missing = set(FEATURED) - {record['id'] for record in records}
     if missing: raise ValueError('Unknown featured paper IDs: ' + ', '.join(sorted(missing)))
+    missing_highlights = set(HIGHLIGHTS) - {record['id'] for record in records}
+    if missing_highlights: raise ValueError('Unknown highlighted paper IDs: ' + ', '.join(sorted(missing_highlights)))
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT/'assets', OUT/'assets', dirs_exist_ok=True)
     (OUT/'index.html').write_text(home(records))
@@ -247,6 +251,8 @@ def build():
 SITE = json.loads((CONTENT/'site.json').read_text())
 PAGE = json.loads((CONTENT/'page.json').read_text())
 FEATURED = {item['id']: item for item in (PAGE.get('featured') or [])}
+HIGHLIGHTS = {item['id']: item.get('label') for item in (PAGE.get('highlights') or [])}
+if len(HIGHLIGHTS) != len((PAGE.get('highlights') or [])): raise ValueError('Duplicate highlighted paper IDs')
 if len(FEATURED) != len((PAGE.get('featured') or [])): raise ValueError('Duplicate featured paper IDs')
 research_ids = [item.get('id', '') for item in (PAGE.get('research') or [])]
 if len(research_ids) != len(set(research_ids)): raise ValueError('Duplicate research IDs')

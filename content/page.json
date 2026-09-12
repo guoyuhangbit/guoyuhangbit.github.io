@@ -91,5 +91,11 @@
   },
   "contact": {
     "subtitle": "研究交流、学生指导与合作探讨"
-  }
+  },
+  "highlights": [
+    {
+      "id": "lan_peap_2026",
+      "label": "SAC Highlight"
+    }
+  ]
 }
