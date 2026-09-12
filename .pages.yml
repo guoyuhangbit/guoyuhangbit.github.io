@@ -1,0 +1,215 @@
+settings:
+  content:
+    merge: true
+  commit:
+    identity: app
+content:
+  - name: page
+    label: 页面文字
+    type: file
+    path: content/page.json
+    format: json
+    fields:
+      - name: home
+        label: 首页介绍
+        type: object
+        fields:
+          - name: intro
+            label: 个人简介
+            type: text
+      - name: research
+        label: 研究方向
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{title}'
+        fields:
+          - name: id
+            label: 方向标识
+            type: string
+            required: true
+            pattern: '^[a-z][a-z0-9-]*$'
+            description: 使用英文小写字母和连字符，例如 language。
+          - name: title
+            label: 中文名称
+            type: string
+            required: true
+          - name: title_en
+            label: 英文名称
+            type: string
+          - name: label
+            label: 英文简称
+            type: string
+          - name: text
+            label: 研究介绍
+            type: text
+          - name: keywords
+            label: 关键词
+            type: string
+      - name: students
+        label: 面向学生
+        type: object
+        fields:
+          - name: title
+            label: 标题
+            type: string
+          - name: text
+            label: 介绍
+            type: text
+          - name: topics
+            label: 研究主题
+            type: string
+            list: true
+      - name: collaboration
+        label: 学术与项目合作
+        type: object
+        fields:
+          - name: title
+            label: 标题
+            type: string
+          - name: text
+            label: 介绍
+            type: text
+          - name: invitation
+            label: 联系说明
+            type: text
+      - name: featured
+        label: 首页代表成果
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{label}'
+        fields:
+          - name: id
+            label: 论文
+            type: select
+            required: true
+            options:
+              values: [{"name": "liu2026", "label": "2026 · Towards multi-language repository-level code generation: From-scratch to guided tasks"}, {"name": "lan_pestest_2026", "label": "2026 · PesTest: A Comprehensive Benchmark for Psychological Emotional Support Capability of Large Language Models"}, {"name": "xia_pmmtd_2026", "label": "2026 · PMMTD: Towards Proactive Multimodal Mixed-Type Dialogues"}, {"name": "shan_pec-home_2026", "label": "2026 · PEC-Home: Interpretation of Progressively Elliptical Commands in Smart Homes"}, {"name": "lan_peap_2026", "label": "2026 · PEAP: Proactive Embodied Action Sequence Planning with Joint Understanding of Vision and Audio Perception"}, {"name": "cheng_mem2evolve_2026", "label": "2026 · Mem^2Evolve: Towards Self-Evolving Agents via Co-Evolutionary Capability Expansion and Experience Distillation"}, {"name": "yao2026", "label": "2026 · Incorporating Self-Rewriting into Large Language Model Reasoning Reinforcement"}, {"name": "noauthor_enhancing_nodate", "label": "2026 · Enhancing End-to-end Multilingual Medical Speech Translation via Terminology Injection Mechanism"}, {"name": "lan2026", "label": "2026 · Controllable timbre cloning and style replication with reference speech examples for multimodal human-computer interaction"}, {"name": "tian_beyond_2026", "label": "2026 · Beyond Literal Mapping: Benchmarking and Improving Non-Literal Translation Evaluation"}, {"name": "lu2025", "label": "2025 · TransBench: Breaking Barriers for Transferable Graphical User Interface Agents in Dynamic Digital Environments"}, {"name": "cheng2025", "label": "2025 · ToolSpectrum: Towards Personalized Tool Utilization for Large Language Models"}, {"name": "xia2025", "label": "2025 · SafeToolBench: Pioneering a Prospective Benchmark to Evaluating Tool Utilization Safety in LLMs"}, {"name": "yao2025", "label": "2025 · ReFF: Reinforcing Format Faithfulness in Language Models Across Varied Tasks"}, {"name": "tian2025b", "label": "2025 · PRIM: Towards Practical In-Image Multilingual Machine Translation"}, {"name": "huang_optimizing_2025", "label": "2025 · Optimizing Cross-Modality Alignment Module for Audio Large Language Models"}, {"name": "li2025", "label": "2025 · HomeBench: Evaluating LLMs in Smart Homes with Valid and Invalid Instructions Across Single and Multiple Devices"}, {"name": "tian2025", "label": "2025 · Exploring In-Image Machine Translation with Real-World Background"}, {"name": "zeng2025", "label": "2025 · DocMEdit: Towards Document-Level Model Editing"}, {"name": "kang2024", "label": "2024 · 面向临床发现的复杂事件抽取"}, {"name": "HuangHeYan2024", "label": "2024 · 大语言模型安全性：分类、评估、归因、缓解、展望"}, {"name": "li2024", "label": "2024 · TED-EL: A Corpus for Speech Entity Linking"}, {"name": "shi2024b", "label": "2024 · Medical Dialogue System: A Survey of Categories, Methods, Evaluation and Challenges"}, {"name": "zeng2024", "label": "2024 · FAME: Towards Factual Multi-Task Model Editing"}, {"name": "yao2024", "label": "2024 · Deterministic Reversible Data Augmentation for Neural Machine Translation"}, {"name": "lan2023", "label": "2023 · 融合预训练模型的端到端语音命名实体识别(End-to-End Speech Named Entity Recognition with Pretrained Models)"}, {"name": "huangXiaomiAILabs2023", "label": "2023 · The Xiaomi AI Lab's Speech Translation Systems for IWSLT 2023 Offline Task, Simultaneous Task and Speech-to-Speech Task"}, {"name": "liu2023b", "label": "2023 · Rethinking the Reasonability of the Test Set for Simultaneous Machine Translation"}, {"name": "tian2023", "label": "2023 · In-Image Neural Machine Translation with Segmented Pixel Sequence-to-Sequence Model"}, {"name": "wang2023", "label": "2023 · Forward Translation to Mix Data for Speech Translation"}, {"name": "zeng2023", "label": "2023 · BIT-ACT: An Ancient Chinese Translation System Using Data Augmentation"}, {"name": "wang2023a", "label": "2023 · BIT's System for Multilingual Track"}, {"name": "chen2023", "label": "2023 · Automatic Evaluate Dialogue Appropriateness by Using Dialogue Act"}, {"name": "guo2022", "label": "2022 · The Xiaomi Text-to-Text Simultaneous Speech Translation System for IWSLT 2022"}, {"name": "song2022a", "label": "2022 · Overview of the NLPCC2022 Shared Task on Speech Entity Linking"}, {"name": "chengDataShiftCrossModalData2022", "label": "2022 · DataShift: A Cross-Modal Data Augmentation Method for Speech Recognition and Machine Translation"}, {"name": "liu2022", "label": "2022 · BIT-Xiaomi's System for AutoSimTrans 2022"}, {"name": "tian2022", "label": "2022 · Ancient Chinese Word Segmentation and Part-of-Speech Tagging Using Data Augmentation"}, {"name": "liu2021", "label": "2021 · BIT's system for AutoSimulTrans2021"}, {"name": "li2020a", "label": "2020 · BIT's system for the AutoSimTrans 2020"}, {"name": "guo2013b", "label": "2013 · Microblog Entity Linking by Leveraging Extra Posts"}]
+          - name: label
+            label: 管理界面中的简称
+            type: string
+            required: true
+          - name: summary
+            label: 中文成果介绍
+            type: text
+          - name: url
+            label: 代码或数据网址
+            type: string
+            pattern: '^$|^https?://[^\s]+$'
+      - name: publications
+        label: 论文目录说明
+        type: object
+        fields:
+          - name: intro
+            label: 目录介绍
+            type: text
+            description: 可留空，留空时不显示。
+          - name: note
+            label: 补充说明
+            type: text
+            description: 可留空，留空时不显示。
+      - name: course
+        label: 数据结构课程页面
+        type: object
+        fields:
+          - name: title
+            label: 课程名称
+            type: string
+            required: true
+          - name: title_en
+            label: 英文名称
+            type: string
+          - name: year
+            label: 教学年份
+            type: string
+            pattern: '^\d{4}$'
+            required: true
+          - name: subtitle
+            label: 课程简介
+            type: string
+          - name: audience
+            label: 授课对象
+            type: string
+          - name: format
+            label: 课件形式
+            type: string
+          - name: pending_title
+            label: 课件未发布时的标题
+            type: string
+          - name: pending_text
+            label: 课件未发布时的介绍
+            type: text
+          - name: pending_hint
+            label: 课件未发布时的补充说明
+            type: text
+          - name: open_title
+            label: 课件开放后的标题
+            type: string
+          - name: open_text
+            label: 课件开放后的介绍
+            type: text
+          - name: open_label
+            label: 课件链接按钮文字
+            type: string
+          - name: notice
+            label: 教学提示
+            type: text
+      - name: contact
+        label: 联系区域
+        type: object
+        fields:
+          - name: subtitle
+            label: 联系说明
+            type: string
+  - name: site
+    label: 基本资料与链接
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: name
+        label: 中文姓名
+        type: string
+        required: true
+      - name: name_en
+        label: 英文姓名
+        type: string
+        required: true
+      - name: affiliation
+        label: 所在单位
+        type: string
+        required: true
+      - name: affiliation_en
+        label: 单位英文名称
+        type: string
+      - name: scholar
+        label: Google Scholar 网址
+        type: string
+        pattern: '^$|^https?://[^\s]+$'
+      - name: github
+        label: 研究组 GitHub 网址
+        type: string
+        pattern: '^$|^https?://[^\s]+$'
+      - name: orcid
+        label: ORCID 网址
+        type: string
+        pattern: '^$|^https?://[^\s]+$'
+      - name: faculty
+        label: 学院个人页网址
+        type: string
+        pattern: '^https?://[^\s]+$'
+        required: true
+      - name: course_url
+        label: 数据结构课件网址
+        type: string
+        pattern: '^$|^https?://[^\s]+$'
+        description: 尚未发布时留空；填写后，课程页面自动显示进入课件的按钮。
+      - name: updated
+        label: 页面更新日期
+        type: string
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        required: true
+        description: 例如 2026-09-12。

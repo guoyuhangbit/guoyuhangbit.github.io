@@ -1,0 +1,99 @@
+{
+  "home": {
+    "intro": "我研究自然语言处理与语言智能，关注机器如何理解语言、连接多模态信息，并在真实场景中可靠地完成任务。"
+  },
+  "research": [
+    {
+      "id": "language",
+      "title": "语言理解与机器翻译",
+      "title_en": "Language Understanding & Translation",
+      "label": "LANGUAGE",
+      "text": "从实体识别与信息抽取，到同声传译、图像内翻译与非字面翻译评价，研究跨语言、跨场景的信息理解与表达。",
+      "keywords": "信息抽取 · 语音翻译 · 翻译评估"
+    },
+    {
+      "id": "multimodal",
+      "title": "多模态感知与交互",
+      "title_en": "Multimodal Perception & Interaction",
+      "label": "MULTIMODAL",
+      "text": "融合语音、视觉与文本，探索多模态对话、语音生成与具身动作规划，让模型更好地理解情境与交互意图。",
+      "keywords": "语音与音频 · 多模态对话 · 具身规划"
+    },
+    {
+      "id": "agents",
+      "title": "大模型与可信智能体",
+      "title_en": "Language Models & Reliable Agents",
+      "label": "AGENTS",
+      "text": "围绕模型编辑、输出格式遵循、工具调用与智能家居任务，研究大模型的能力增强，以及可验证的可靠性与安全性。",
+      "keywords": "强化学习 · 模型编辑 · 工具安全"
+    }
+  ],
+  "students": {
+    "title": "从一个感兴趣的问题开始",
+    "text": "如果你正在了解研究方向、选择导师，可以先阅读一篇感兴趣的论文，或运行一个开源项目，思考你想进一步解决的问题。",
+    "topics": [
+      "语言理解、机器翻译与信息抽取",
+      "多模态交互与智能体任务规划",
+      "大模型评估、能力增强与安全性"
+    ]
+  },
+  "collaboration": {
+    "title": "让研究成果成为交流的起点",
+    "text": "论文与开源项目提供了方法、评测和实验实现。欢迎围绕具体应用场景、数据条件与技术问题展开交流。",
+    "invitation": "联系时可简要介绍背景、感兴趣的工作与希望讨论的问题。"
+  },
+  "featured": [
+    {
+      "id": "lan_peap_2026",
+      "label": "PEAP",
+      "summary": "结合视觉与音频感知，研究具身智能体如何主动规划动作序列。",
+      "url": "https://github.com/BITHLP/PEAP"
+    },
+    {
+      "id": "tian_beyond_2026",
+      "label": "RATE",
+      "summary": "面向非字面翻译建立评估基准，探索更贴近语义的翻译质量评价。",
+      "url": "https://github.com/BITHLP/RATE"
+    },
+    {
+      "id": "li2025",
+      "label": "HomeBench",
+      "summary": "覆盖单设备、多设备及有效与无效指令，评估大模型在智能家居中的指令理解能力。",
+      "url": "https://github.com/BITHLP/HomeBench"
+    },
+    {
+      "id": "yao2025",
+      "label": "ReFF",
+      "summary": "围绕输出格式遵循开展强化学习研究，提高大模型跨任务的格式可靠性。",
+      "url": "https://github.com/BITHLP/ReFF"
+    },
+    {
+      "id": "xia2025",
+      "label": "SafeToolBench",
+      "summary": "从工具调用的潜在后果出发，评估大模型使用工具时的安全性。",
+      "url": "https://github.com/BITHLP/SafeToolBench"
+    }
+  ],
+  "publications": {
+    "intro": "",
+    "note": ""
+  },
+  "course": {
+    "title": "数据结构",
+    "title_en": "Data Structures",
+    "year": "2026",
+    "subtitle": "本科课程",
+    "audience": "本科生",
+    "format": "网页版",
+    "pending_title": "课件正在准备中",
+    "pending_text": "本课程计划采用网页版课件进行本科教学。目前课件尚未发布。",
+    "pending_hint": "课件上线后将在本页提供访问入口。你可以收藏此页，后续从这里进入课程。",
+    "open_title": "网页版课件",
+    "open_text": "课程课件已开放，请通过下方入口访问。",
+    "open_label": "进入课程课件",
+    "notice": "具体教学安排以课堂通知为准。"
+  },
+  "contact": {
+    "subtitle": "研究交流、学生指导与合作探讨"
+  }
+}

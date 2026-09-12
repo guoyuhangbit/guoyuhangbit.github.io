@@ -22,6 +22,8 @@ jobs:
         run: python3 build.py
       - name: Validate static output
         run: python3 check.py
+      - name: Validate content editing
+        run: python3 -m unittest -q
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
