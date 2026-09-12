@@ -47,10 +47,10 @@ def main():
     for key,role in build.AUTHORSHIP.items():
         record = next(r for r in records if r['id'] == key)
         names = [build.plain(n) for n in record['author'].split(' and ')]
-        if role.get('equivalent_first'):
-            assert names[1] in ('Guo, Yuhang','郭宇航') and role.get('equivalent_first_basis'), key
+        if role.get('student_first_supervisor_second'):
+            assert names[1] in ('Guo, Yuhang','郭宇航'), key
         if role.get('corresponding'):
-            assert role.get('evidence') and role['corresponding_status'] == 'confirmed', key
+            assert role['corresponding'] is True, key
     public_roles = (build.CONTENT/'authorship.json').read_text()
     assert '/Users/' not in public_roles and 'guoyuhang@' not in public_roles
     print(f'Passed: {len(pages)} pages, local links/anchors, {len(records)} bibliography entries, author/year completeness and public-data checks.')

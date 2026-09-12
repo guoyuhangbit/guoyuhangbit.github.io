@@ -85,7 +85,7 @@ def authorship_html(record):
     status = AUTHORSHIP.get(record['id'], {})
     labels = []
     if status.get('first_author'): labels.append(('第一作者', '按论文署名顺序'))
-    if status.get('equivalent_first'): labels.append(('等效一作', '学生第一作者、导师第二作者；指导关系经本人确认'))
+    if status.get('student_first_supervisor_second'): labels.append(('学生一作，导师二作', '学生第一作者、导师第二作者'))
     if status.get('corresponding'): labels.append(('通讯作者', '依据论文作者标记及通讯说明'))
     if not labels: return ''
     return '<div class="role-tags" aria-label="郭宇航的作者身份">' + ''.join(f'<span class="role-tag" title="{esc(note)}">{label}</span>' for label,note in labels) + '</div>'
@@ -160,7 +160,7 @@ def bibliography(records):
     for year in years:
         ordered = sorted(groups[year], key=lambda r: (r.get('date', r.get('year','')), plain(r['title'])), reverse=True)
         sections += f'<section class="year-section" id="year-{esc(year)}"><h2>{esc(year)}</h2>' + ''.join(paper(r) for r in ordered) + '</section>'
-    return frame(f'<div class="page-heading"><p class="eyebrow">PUBLICATIONS</p><h1>学术成果</h1><p>按年份整理的 {len(records)} 篇论文，涵盖语言理解、机器翻译、多模态交互与大模型智能体。作者按原文顺序列出。</p><p class="authorship-note">作者身份标签均指郭宇航。通讯作者按论文署名说明标注；等效一作采用“学生第一作者、导师第二作者”的成果认定口径，不代表论文声明的共同第一作者。</p><div class="page-actions"><a class="button" href="../publications.bib" download>下载全部 BibTeX</a><a class="button" href="{safe_url(SITE["scholar"])}" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a></div></div><div class="bibliography-layout"><nav class="year-nav" aria-label="论文年份">{years_nav}</nav><div>{sections}</div></div>', '学术成果', '../', 'publications', 'publications/')
+    return frame(f'<div class="page-heading"><p class="eyebrow">PUBLICATIONS</p><h1>学术成果</h1><p>按年份整理的 {len(records)} 篇论文，涵盖语言理解、机器翻译、多模态交互与大模型智能体。作者按原文顺序列出。</p><p class="authorship-note">作者身份标签均指郭宇航。通讯作者按论文署名说明标注；师生署名按论文作者顺序标注。</p><div class="page-actions"><a class="button" href="../publications.bib" download>下载全部 BibTeX</a><a class="button" href="{safe_url(SITE["scholar"])}" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a></div></div><div class="bibliography-layout"><nav class="year-nav" aria-label="论文年份">{years_nav}</nav><div>{sections}</div></div>', '学术成果', '../', 'publications', 'publications/')
 
 def teaching():
     if SITE.get('course_url'):

@@ -1,0 +1,18 @@
+{
+  "huang_optimizing_2025": {
+    "author": "Huang, Shuanghong and Feng, Chong and Lin, Xiang and Wang, Bin and Guo, Yuhang and Yan, Ming and Wu, Hao",
+    "source": "https://www.sciengine.com/parse/pdf/2096-7004/E391BAA4532D41A7811CF87C99D8BE2E.pdf",
+    "reason": "官方 PDF 首页索引列出 7 位作者，修正原始导出中的整组重复。"
+  },
+  "noauthor_enhancing_nodate": {
+    "type": "article",
+    "author": "Huang, Shuanghong and Feng, Chong and Liu, Xia and Xu, Jinlei and Zhao, Xuan and Shi, Ge and Guo, Yuhang and Gao, Yulong",
+    "journal": "Data Intelligence",
+    "year": "2026",
+    "volume": "8",
+    "pages": "1--18",
+    "doi": "10.3724/2096-7004.di.2025.0112",
+    "source": "https://www.sciengine.com/cfs/files/pdfs/view/2096-7004/1A28DB1BC4A74FB1ADCF042FB376ADDA.pdf",
+    "reason": "根据官方 PDF 首页搜索索引中的作者栏及正式引用补全；文章号 20250112。保留原始文献键以便对应。"
+  }
+}

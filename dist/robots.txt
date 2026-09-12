@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://guoyuhangbit.github.io/sitemap.xml
