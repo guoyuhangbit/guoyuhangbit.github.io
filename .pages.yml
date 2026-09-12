@@ -9,6 +9,8 @@ content:
     type: file
     path: content/page.json
     format: json
+    operations:
+      delete: false
     fields:
       - name: home
         label: 首页介绍
@@ -169,6 +171,8 @@ content:
     type: file
     path: content/site.json
     format: json
+    operations:
+      delete: false
     fields:
       - name: name
         label: 中文姓名
