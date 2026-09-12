@@ -68,10 +68,10 @@
       "url": "https://github.com/BITHLP/ReFF"
     },
     {
-      "id": "xia2025",
-      "label": "SafeToolBench",
-      "summary": "从工具调用的潜在后果出发，评估大模型使用工具时的安全性。",
-      "url": "https://github.com/BITHLP/SafeToolBench"
+      "id": "yao2026",
+      "label": "Self-Rewriting",
+      "summary": "让模型重写自身推理过程并用于强化学习，提升推理质量，减少冗余思考。",
+      "url": ""
     }
   ],
   "course": {
