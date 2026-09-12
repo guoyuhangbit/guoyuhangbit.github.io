@@ -96,6 +96,18 @@
     {
       "id": "lan_peap_2026",
       "label": "SAC Highlight"
+    },
+    {
+      "id": "lan_peap_2026",
+      "label": "ACL Oral"
+    },
+    {
+      "id": "tian_beyond_2026",
+      "label": "ACL Oral"
+    },
+    {
+      "id": "li2024",
+      "label": "Oral"
     }
   ]
 }

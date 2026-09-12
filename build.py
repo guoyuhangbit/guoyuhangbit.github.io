@@ -117,8 +117,8 @@ def paper(record, featured=False):
     title_html = f'<a href="{safe_url(url)}" target="_blank" rel="noopener noreferrer">{title}</a>' if url else title
     links = f'<a href="{safe_url(url)}" target="_blank" rel="noopener noreferrer">论文 <span aria-hidden="true">↗</span></a>' if url else ''
     extra = FEATURED.get(record['id'])
-    highlight = HIGHLIGHTS.get(record['id'])
-    highlight_html = f'<div class="paper-highlights"><span class="paper-highlight"><span aria-hidden="true">★</span> {esc(highlight)}</span></div>' if highlight else ''
+    highlights = HIGHLIGHTS.get(record['id'], [])
+    highlight_html = '<div class="paper-highlights">' + ''.join(f'<span class="paper-highlight"><span aria-hidden="true">★</span> {esc(label)}</span>' for label in highlights) + '</div>' if highlights else ''
     if extra and extra.get('url'): links += f'<a href="{safe_url(extra["url"])}" target="_blank" rel="noopener noreferrer">代码与数据 <span aria-hidden="true">↗</span></a>'
     summary = text_element('p', extra.get('summary'), ' class="pub-summary"') if featured and extra else ''
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
@@ -251,8 +251,11 @@ def build():
 SITE = json.loads((CONTENT/'site.json').read_text())
 PAGE = json.loads((CONTENT/'page.json').read_text())
 FEATURED = {item['id']: item for item in (PAGE.get('featured') or [])}
-HIGHLIGHTS = {item['id']: item.get('label') for item in (PAGE.get('highlights') or [])}
-if len(HIGHLIGHTS) != len((PAGE.get('highlights') or [])): raise ValueError('Duplicate highlighted paper IDs')
+HIGHLIGHTS = defaultdict(list)
+for item in (PAGE.get('highlights') or []):
+    label = (item.get('label') or '').strip()
+    if label and label not in HIGHLIGHTS[item['id']]:
+        HIGHLIGHTS[item['id']].append(label)
 if len(FEATURED) != len((PAGE.get('featured') or [])): raise ValueError('Duplicate featured paper IDs')
 research_ids = [item.get('id', '') for item in (PAGE.get('research') or [])]
 if len(research_ids) != len(set(research_ids)): raise ValueError('Duplicate research IDs')

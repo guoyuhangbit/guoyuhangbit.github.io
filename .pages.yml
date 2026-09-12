@@ -119,7 +119,7 @@ content:
             label: 标签文字
             type: string
             required: true
-            description: 同时显示在首页代表成果和完整论文目录中。
+            description: 同时显示在首页代表成果和完整论文目录中。同一论文可添加多条标签。
       - name: publications
         label: 论文目录说明
         type: object
