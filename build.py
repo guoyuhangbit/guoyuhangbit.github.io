@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'dist'
 CONTENT = ROOT / 'content'
-KEEP = {'title', 'author', 'date', 'year', 'booktitle', 'journal', 'journaltitle', 'volume', 'number', 'pages', 'publisher', 'doi', 'url'}
+KEEP = {'title', 'author', 'date', 'year', 'booktitle', 'journal', 'journaltitle', 'volume', 'number', 'pages', 'publisher', 'doi', 'url', 'note'}
 
 def parse_bib(text):
     records = []
@@ -107,6 +107,9 @@ def venue(record):
     for fragment, label in [('acl-long','ACL'), ('emnlp-main','EMNLP'), ('D13-', 'EMNLP'), ('lrec-main', 'LREC–COLING'), ('iwslt-', 'IWSLT'), ('autosimtrans-', 'AutoSimTrans'), ('ccl-', 'CCL')]:
         if fragment in url: return f'{label} {esc(year)}'
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
+    if re.search(r'\bEMNLP\b|Empirical Methods in Natural Language Processing', full, re.I):
+        track = '<br>Findings' if re.search(r'\bFindings\b', full, re.I) else ('<br>主会' if plain(record.get('note', '')) == 'Accepted, to appear' else '')
+        return f'EMNLP {esc(year)}{track}'
     for marker,label in [('AAAI','AAAI'), ('Neurocomputing','Neurocomputing'), ('Frontiers of Computer Science','FCS'), ('Data Intelligence','Data Intelligence'), ('ICASSP','ICASSP'), ('ICNLP','ICNLP')]:
         if marker in full: return f'{label} {esc(year)}'
     for marker, label in [('Pacific Asia Conference', 'PACLIC'), ('Semantic Evaluation', 'SemEval'), ('International Joint Conference on Natural Language Processing', 'IJCNLP'), ('Conference on Computational Natural Language Learning', 'CoNLL')]:
@@ -125,8 +128,9 @@ def paper(record, featured=False):
     summary = text_element('p', extra.get('summary'), ' class="pub-summary"') if featured and extra else ''
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
     full_html = f'<p class="paper-venue-full">{esc(full)}</p>' if not featured and full else ''
+    status_html = '<p class="publication-status">已录用 · 待正式出版</p>' if plain(record.get('note', '')) == 'Accepted, to appear' else ''
     citation = '' if featured else f'<details class="citation"><summary>BibTeX 引用</summary><pre>{esc(bib_record(record))}</pre></details>'
-    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3><p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
+    return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3><p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
 def frame(body, title, depth='', current='home', page_path=''):
     nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'teaching/data-structures/'), ('contact', '联系', depth+'index.html#contact')]

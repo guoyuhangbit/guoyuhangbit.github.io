@@ -106,5 +106,11 @@
   },
   "guo-etal-2007-hit": {
     "first_author": true
+  },
+  "zheng_household_2026": {
+    "corresponding": true
+  },
+  "shan_own_solutions_2026": {
+    "corresponding": true
   }
 }
