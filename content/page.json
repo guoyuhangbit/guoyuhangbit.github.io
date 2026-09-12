@@ -1,6 +1,6 @@
 {
   "home": {
-    "intro": "我研究自然语言处理与语言智能，关注机器如何理解语言、连接多模态信息，并在真实场景中可靠地完成任务。"
+    "intro": "研究自然语言处理与语言智能，关注机器如何理解语言、连接多模态信息，并在真实场景中可靠地完成任务。"
   },
   "research": [
     {
@@ -74,10 +74,6 @@
       "url": "https://github.com/BITHLP/SafeToolBench"
     }
   ],
-  "publications": {
-    "intro": "",
-    "note": ""
-  },
   "course": {
     "title": "数据结构",
     "title_en": "Data Structures",
@@ -86,7 +82,7 @@
     "audience": "本科生",
     "format": "网页版",
     "pending_title": "课件正在准备中",
-    "pending_text": "本课程计划采用网页版课件进行本科教学。目前课件尚未发布。",
+    "pending_text": "本课程采用网页版课件进行本科教学。",
     "pending_hint": "课件上线后将在本页提供访问入口。你可以收藏此页，后续从这里进入课程。",
     "open_title": "网页版课件",
     "open_text": "课程课件已开放，请通过下方入口访问。",
