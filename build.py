@@ -109,6 +109,8 @@ def venue(record):
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
     for marker,label in [('AAAI','AAAI'), ('Neurocomputing','Neurocomputing'), ('Frontiers of Computer Science','FCS'), ('Data Intelligence','Data Intelligence'), ('ICASSP','ICASSP'), ('ICNLP','ICNLP')]:
         if marker in full: return f'{label} {esc(year)}'
+    for marker, label in [('Pacific Asia Conference', 'PACLIC'), ('Semantic Evaluation', 'SemEval'), ('International Joint Conference on Natural Language Processing', 'IJCNLP'), ('Conference on Computational Natural Language Learning', 'CoNLL')]:
+        if marker in full: return f'{label} {esc(year)}'
     return esc(year or '条目信息待补充')
 
 def paper(record, featured=False):
@@ -179,7 +181,7 @@ def home(records):
         student_articles.append('<article>' + text_element('h3', collaboration.get('title')) + text_element('p', collaboration.get('text')) + text_element('p', collaboration.get('invitation')) + '<a class="inline-link" href="#contact">联系交流</a> <span aria-hidden="true">↗</span></article>')
     students_section = '<section class="section" id="students"><div class="section-heading"><h2>学生与合作</h2><span class="label">STUDENTS & COLLABORATION</span></div><div class="student-grid">' + ''.join(student_articles) + '</div></section>' if student_articles else ''
     social_links = []
-    for key, label in [('scholar', 'Google Scholar'), ('github', 'GitHub'), ('orcid', 'ORCID')]:
+    for key, label in [('scholar', 'Google Scholar'), ('acl_anthology', 'ACL Anthology'), ('github', 'GitHub'), ('orcid', 'ORCID')]:
         if SITE.get(key): social_links.append(f'<a href="{safe_url(SITE[key])}" target="_blank" rel="noopener noreferrer">{label} <span class="external" aria-hidden="true">↗</span></a>')
     social = '<div class="social">' + ''.join(social_links) + '</div>' if social_links else ''
     institution = (SITE.get('affiliation_en') or '').split(',')[-1].strip().upper()
@@ -198,8 +200,8 @@ def bibliography(records):
         sections += f'<section class="year-section" id="year-{esc(year)}"><h2>{esc(year)}</h2>' + ''.join(paper(r) for r in ordered) + '</section>'
     intro = text_element('p', (PAGE.get('publications') or {}).get('intro'))
     note = text_element('p', (PAGE.get('publications') or {}).get('note'), ' class="subtle-note"')
-    scholar = f'<a class="button" href="{safe_url(SITE["scholar"])}" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a>' if SITE.get('scholar') else ''
-    return frame(f'<div class="page-heading"><p class="eyebrow">PUBLICATIONS</p><h1>学术成果</h1>{intro}{note}<div class="page-actions"><a class="button" href="../publications.bib" download>下载全部 BibTeX</a>{scholar}</div></div><div class="bibliography-layout"><nav class="year-nav" aria-label="论文年份">{years_nav}</nav><div>{sections}</div></div>', '学术成果', '../', 'publications', 'publications/')
+    profiles = ''.join(f'<a class="button" href="{safe_url(SITE[key])}" target="_blank" rel="noopener noreferrer">{label} ↗</a>' for key, label in [('scholar', 'Google Scholar'), ('acl_anthology', 'ACL Anthology')] if SITE.get(key))
+    return frame(f'<div class="page-heading"><p class="eyebrow">PUBLICATIONS</p><h1>学术成果</h1>{intro}{note}<div class="page-actions"><a class="button" href="../publications.bib" download>下载全部 BibTeX</a>{profiles}</div></div><div class="bibliography-layout"><nav class="year-nav" aria-label="论文年份">{years_nav}</nav><div>{sections}</div></div>', '学术成果', '../', 'publications', 'publications/')
 
 def teaching():
     course = (PAGE.get('course') or {})
