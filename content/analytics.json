@@ -1,5 +1,5 @@
 {
-  "guide": "[打开访问统计后台](https://cloud.umami.is/)\n\n登录 Umami 后查看访问量、访客地区、来源网站和热门页面。首次使用请选择免费 Hobby 方案，添加网站 guoyuhangbit.github.io，将网站 ID 填到下方，再开启统计并保存。统计从启用后开始，报表请保持私有。",
-  "enabled": false,
-  "website_id": ""
+  "guide": "[打开访问统计后台](https://cloud.umami.is/)\n\n登录 Umami 后选择 guoyuhangbit.github.io，查看访问量、访客地区、来源网站和热门页面。统计从 2026-09-13 启用后开始；报表请保持私有。下方开关可暂停采集。",
+  "enabled": true,
+  "website_id": "42e676b2-fe03-42f6-91aa-df83897d437c"
 }
