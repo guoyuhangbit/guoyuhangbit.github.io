@@ -162,7 +162,10 @@ def paper(record, featured=False):
     summary = text_element('p', extra.get('summary'), ' class="pub-summary"') if featured and extra else ''
     full = plain(record.get('journaltitle', record.get('journal', record.get('booktitle', ''))))
     full_html = f'<p class="paper-venue-full">{esc(full)}</p>' if not featured and full else ''
-    status_html = '<p class="publication-status">已录用 · 待正式出版</p>' if plain(record.get('note', '')) == 'Accepted, to appear' else ''
+    status_html = ''
+    if plain(record.get('note', '')) == 'Accepted, to appear':
+        status = '已录用 · 待正式出版' + (' · 论文尚未公开' if not url else '')
+        status_html = text_element('p', status, ' class="publication-status"')
     citation = '' if featured else f'<details class="citation"><summary>BibTeX 引用</summary><pre>{esc(bib_record(record))}</pre></details>'
     return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3>{classification_html(record)}<p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
