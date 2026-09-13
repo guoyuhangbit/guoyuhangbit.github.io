@@ -7,6 +7,7 @@ import re
 import shutil
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'dist'
@@ -67,6 +68,13 @@ def has_text(value):
 def safe_url(value):
     if value and not re.match(r'^https?://[^\s]+$', value): raise ValueError(f'Invalid public URL: {value}')
     return esc(value)
+
+def analytics_html():
+    if not ANALYTICS.get('enabled'): return ''
+    domain = urlsplit(SITE['site_url']).hostname
+    return (f'<script defer src="https://cloud.umami.is/script.js" '
+            f'data-website-id="{esc(ANALYTICS["website_id"])}" data-domains="{esc(domain)}" '
+            'data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>')
 
 def bib_record(record):
     kind = record['type']
@@ -171,7 +179,7 @@ def frame(body, title, depth='', current='home', page_path=''):
     description = esc('。'.join(value for value in [SITE['name'], SITE.get('affiliation', ''), (PAGE.get('home') or {}).get('intro', '')] if value))
     initial = esc(SITE['name_en'].split()[-1][:1].upper()) if SITE['name_en'].split() else 'G'
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{full_title}</title><meta name="description" content="{description}"><meta property="og:title" content="{full_title}"><meta property="og:type" content="website">{canonical}<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='4' fill='%23152e2a'/%3E%3Ctext x='20' y='28' text-anchor='middle' fill='white' font-family='Georgia' font-size='27'%3EG%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="{esc(depth)}assets/style.css"><script src="{esc(depth)}assets/site.js" defer></script></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{full_title}</title><meta name="description" content="{description}"><meta property="og:title" content="{full_title}"><meta property="og:type" content="website">{canonical}<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='4' fill='%23152e2a'/%3E%3Ctext x='20' y='28' text-anchor='middle' fill='white' font-family='Georgia' font-size='27'%3EG%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="{esc(depth)}assets/style.css"><script src="{esc(depth)}assets/site.js" defer></script>{analytics_html()}</head>
 <body><a class="skip" href="#main">跳至正文</a><header class="site-header"><div class="wrap header-inner"><a class="brand" href="{esc(depth)}index.html" aria-label="{name}，返回首页"><span class="monogram" aria-hidden="true">{initial}</span><span>{name} <small>{esc(SITE['name_en'].upper())}</small></span></a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">菜单</button><nav class="nav" id="site-nav" aria-label="主导航">{nav_html}</nav></div></header>
 <main id="main" class="wrap">{body}</main><footer class="footer"><div class="wrap footer-inner"><span>© {esc(SITE['updated'][:4])} {name} · {name_en}</span>{text_element('span', SITE.get('affiliation'))}<span>更新于 {esc(SITE['updated'])}</span></div></footer></body></html>'''
 
@@ -283,6 +291,18 @@ def build():
     print(f'Built homepage, publication archive ({len(records)} entries), course page, and 404 page.')
 
 SITE = json.loads((CONTENT/'site.json').read_text())
+analytics_path = CONTENT/'analytics.json'
+ANALYTICS = json.loads(analytics_path.read_text()) if analytics_path.exists() else {}
+if ANALYTICS.get('enabled') is not None and not isinstance(ANALYTICS['enabled'], bool):
+    raise ValueError('Analytics enabled must be a boolean')
+analytics_id = ANALYTICS.get('website_id') or ''
+if not isinstance(analytics_id, str) or (analytics_id and not re.fullmatch(r'[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}', analytics_id)):
+    raise ValueError('Invalid Umami website ID')
+if ANALYTICS.get('enabled'):
+    if not analytics_id: raise ValueError('Analytics requires an Umami website ID before enabling')
+    analytics_site = urlsplit(SITE.get('site_url') or '')
+    if analytics_site.scheme != 'https' or not analytics_site.hostname:
+        raise ValueError('Analytics requires an HTTPS site URL')
 PAGE = json.loads((CONTENT/'page.json').read_text())
 FEATURED = {item['id']: item for item in (PAGE.get('featured') or [])}
 HIGHLIGHTS = defaultdict(list)

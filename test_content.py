@@ -82,6 +82,36 @@ class ContentEditingTests(unittest.TestCase):
         self.edit('site.json', lambda site: site.update(course_url='javascript:alert(1)'))
         self.assertIn('Invalid public URL', self.build(succeeds=False))
 
+    def test_analytics_can_be_enabled_for_all_pages_and_disabled(self):
+        self.edit('analytics.json', lambda config: config.update(enabled=False, website_id=''))
+        self.build()
+        self.assertNotIn('cloud.umami.is', self.read('index.html'))
+        website_id = '00000000-0000-4000-8000-000000000001'
+        self.edit('analytics.json', lambda config: config.update(enabled=True, website_id=website_id))
+        self.build()
+        for path in (self.root / 'dist').rglob('*.html'):
+            page = path.read_text()
+            self.assertEqual(page.count('src="https://cloud.umami.is/script.js"'), 1)
+            self.assertIn(f'data-website-id="{website_id}"', page)
+            self.assertIn('data-domains="guoyuhangbit.github.io"', page)
+            self.assertIn('data-exclude-search="true"', page)
+            self.assertIn('data-exclude-hash="true"', page)
+            self.assertIn('data-do-not-track="true"', page)
+            self.assertNotIn('查看统计与首次设置', page)
+        self.assertFalse((self.root / 'dist' / 'content' / 'analytics.json').exists())
+        self.edit('analytics.json', lambda config: config.update(enabled=False))
+        self.build()
+        for path in (self.root / 'dist').rglob('*.html'):
+            self.assertNotIn('cloud.umami.is', path.read_text())
+
+    def test_incomplete_or_invalid_analytics_blocks_publication(self):
+        self.edit('analytics.json', lambda config: config.update(enabled=True, website_id=''))
+        self.assertIn('requires an Umami website ID', self.build(succeeds=False))
+        self.edit('analytics.json', lambda config: config.update(website_id='\"><script>alert(1)</script>'))
+        self.assertIn('Invalid Umami website ID', self.build(succeeds=False))
+        self.edit('analytics.json', lambda config: config.update(website_id='', enabled='false'))
+        self.assertIn('must be a boolean', self.build(succeeds=False))
+
 
 if __name__ == '__main__':
     unittest.main()

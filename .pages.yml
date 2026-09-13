@@ -4,6 +4,31 @@ settings:
   commit:
     identity: app
 content:
+  - name: analytics
+    label: 访问统计
+    type: file
+    path: content/analytics.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: guide
+        label: 查看统计与首次设置
+        type: rich-text
+        readonly: true
+        options:
+          format: markdown
+          media: false
+          switcher: false
+      - name: website_id
+        label: Umami 网站 ID
+        type: string
+        pattern: '^$|^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$'
+        description: 从 Umami 网站设置复制 Website ID；这是网站编号，请勿填写密码或 API 密钥。
+      - name: enabled
+        label: 开启访问统计
+        type: boolean
+        description: 填好网站 ID 后开启并保存。关闭后停止采集，不会删除已有报表。
   - name: page
     label: 页面文字
     type: file
