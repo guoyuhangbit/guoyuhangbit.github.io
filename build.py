@@ -270,7 +270,7 @@ def course_directory(page_path):
         ('向内 · 专业选择探索', 'https://chat.hltbit.top/', '专业选择与学习方向探索应用。')]:
         if url:
             cards.append(f'<article><h2>{esc(title)}</h2><p>{esc(description)}</p><a class="inline-link" href="{safe_url(url)}">进入主页 ↗</a></article>')
-    body = '<section class="section"><p class="eyebrow">TEACHING / 2026</p><h1>课程与学习资源</h1><div class="teaching-grid">' + ''.join(cards) + '</div><div class="page-actions"><a class="inline-link" href="https://www.hltbit.top/">语言技术研究组 ↗</a></div></section>'
+    body = '<section class="section course-directory"><p class="eyebrow">TEACHING / 2026</p><h1>课程与学习资源</h1><div class="teaching-grid">' + ''.join(cards) + '</div><div class="page-actions"><a class="inline-link" href="https://www.hltbit.top/">语言技术研究组 ↗</a></div></section>'
     return frame(body, '2026 课程与学习资源', '../', 'teaching', page_path)
 
 
