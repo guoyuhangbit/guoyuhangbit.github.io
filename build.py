@@ -170,7 +170,7 @@ def paper(record, featured=False):
     return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3>{classification_html(record)}<p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
 def frame(body, title, depth='', current='home', page_path=''):
-    nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'index.html#teaching'), ('contact', '联系', depth+'index.html#contact')]
+    nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'teaching/'), ('contact', '联系', depth+'index.html#contact')]
     hidden = set()
     if not PAGE.get('research'): hidden.add('research')
     if not has_text(PAGE.get('students')) and not has_text(PAGE.get('collaboration')): hidden.add('students')
@@ -227,7 +227,7 @@ def home(records):
     social = '<div class="social">' + ''.join(social_links) + '</div>' if social_links else ''
     institution = (SITE.get('affiliation_en') or '').split(',')[-1].strip().upper()
     hero = '<section class="hero"><div>' + text_element('p', institution, ' class="eyebrow"') + text_element('h1', SITE['name']) + text_element('p', SITE.get('name_en'), ' class="english-name" lang="en"') + text_element('p', SITE.get('affiliation'), ' class="affiliation"') + text_element('p', (PAGE.get('home') or {}).get('intro'), ' class="intro"') + social + '</div>' + research_index + '</section>'
-    course_links = '<article><h3>数据结构</h3><p>2026 · 本科课程</p><a class="inline-link" href="teaching/data-structures/">课程介绍与学习资源 ↗</a></article>'
+    course_links = '<article><h3>数据结构</h3><p>2026 · 本科课程</p><a class="inline-link" href="https://ds.hltbit.top/2026/">进入课程主页 ↗</a></article>'
     if SITE.get('nlp_course_url'):
         course_links += '<article><h3>自然语言处理项目实践</h3><p>2026 · 文本处理、模型训练与评价，以及论文部分复现。</p><a class="inline-link" href="' + safe_url(SITE['nlp_course_url']) + '">进入课程主页 ↗</a></article>'
     teaching_section = '<section class="section" id="teaching"><div class="section-heading"><h2>教学与学习资源</h2><span class="label">TEACHING</span></div><div class="student-grid">' + course_links + '</div></section>'
@@ -262,6 +262,26 @@ def teaching():
     status += text_element('p', course.get('notice'), ' class="subtle-note"')
     return frame(f'<div class="course-page">{heading}<div class="course-layout"><section class="course-state">{status}</section><aside class="course-details"><h2>课程信息</h2><dl>{details}<dt>课程联系</dt><dd><a class="inline-link" href="../../index.html#contact">教师联系方式 ↗</a></dd></dl></aside></div><div class="page-actions"><a class="inline-link" href="../../index.html">← 返回学术主页</a></div></div>', title, '../../', 'teaching', 'teaching/data-structures/')
 
+def course_directory(page_path):
+    cards = []
+    for title, url, description in [
+        ('数据结构', SITE.get('course_url'), '本科课程 · 课程安排、章节要点与交互课件。'),
+        ('自然语言处理项目实践', SITE.get('nlp_course_url'), '本科课程 · 文本处理、模型训练与评价、论文部分复现。'),
+        ('向内 · 专业选择探索', 'https://chat.hltbit.top/', '专业选择与学习方向探索应用。')]:
+        if url:
+            cards.append(f'<article><h2>{esc(title)}</h2><p>{esc(description)}</p><a class="inline-link" href="{safe_url(url)}">进入主页 ↗</a></article>')
+    body = '<section class="section"><p class="eyebrow">TEACHING / 2026</p><h1>课程与学习资源</h1><div class="teaching-grid">' + ''.join(cards) + '</div><div class="page-actions"><a class="inline-link" href="https://www.hltbit.top/">语言技术研究组 ↗</a></div></section>'
+    return frame(body, '2026 课程与学习资源', '../', 'teaching', page_path)
+
+
+def compatibility_page(target, title, page_path):
+    depth = '../' * page_path.count('/')
+    body = f'<section class="section"><p class="eyebrow">COURSE & APPLICATION</p><h1>{esc(title)}</h1><p>正在前往正式入口。如未自动跳转，请点击下面的链接。</p><a class="button" href="{safe_url(target)}">进入{esc(title)} ↗</a></section>'
+    page = frame(body, title, depth, 'teaching', page_path)
+    page = re.sub(r'<link rel="canonical"[^>]+>', '<link rel="canonical" href="'+safe_url(target)+'">', page)
+    return page.replace('</head>', '<meta http-equiv="refresh" content="0;url='+safe_url(target)+'"></head>')
+
+
 def build():
     parser = argparse.ArgumentParser()
     parser.add_argument('--import-bib', type=Path)
@@ -289,10 +309,29 @@ def build():
     (OUT/'publications.bib').write_text('\n\n'.join(bib_record(r) for r in records)+'\n')
     (OUT/'teaching/data-structures').mkdir(parents=True, exist_ok=True)
     (OUT/'teaching/data-structures/index.html').write_text(teaching())
+    for path in ('teaching/', '2026/'):
+        (OUT/path).mkdir(parents=True, exist_ok=True)
+        (OUT/path/'index.html').write_text(course_directory(path))
+    aliases = {
+        'ds/': ('https://ds.hltbit.top/2026/', '数据结构'),
+        'ds/2026/': ('https://ds.hltbit.top/2026/', '数据结构'),
+        'nlp/': ('https://nlp.hltbit.top/2026/', '自然语言处理项目实践'),
+        'nlp/2026/': ('https://nlp.hltbit.top/2026/', '自然语言处理项目实践'),
+        'chat/': ('https://chat.hltbit.top/', '向内 · 专业选择探索'),
+        'chat/2026/': ('https://chat.hltbit.top/', '向内 · 专业选择探索'),
+        'www/': ('https://www.hltbit.top/', '语言技术研究组'),
+        'www/2026/': ('https://www.hltbit.top/2026/', '2026 课程与应用'),
+        'teaching/nlp/': ('https://nlp.hltbit.top/2026/', '自然语言处理项目实践'),
+        'teaching/natural-language-processing/': ('https://nlp.hltbit.top/2026/', '自然语言处理项目实践'),
+        'teaching/data-structures/2026/': ('https://ds.hltbit.top/2026/', '数据结构'),
+    }
+    for path, (target, title) in aliases.items():
+        (OUT/path).mkdir(parents=True, exist_ok=True)
+        (OUT/path/'index.html').write_text(compatibility_page(target, title, path))
     (OUT/'404.html').write_text(frame('<section class="not-found"><p class="eyebrow">404</p><h1>这个页面暂时找不到</h1><p>请从学术主页访问论文与课程。</p><div class="page-actions"><a class="button" href="' + (safe_url(SITE['site_url']).rstrip('/')+'/' if SITE.get('site_url') else '/') + '">返回主页</a></div></section>', '页面未找到', depth=(SITE['site_url'].rstrip('/')+'/' if SITE.get('site_url') else '/')))
     (OUT/'.nojekyll').touch()
     if SITE.get('site_url'):
-        urls = [SITE['site_url'].rstrip('/')+'/'+path for path in ('', 'publications/', 'teaching/data-structures/')]
+        urls = [SITE['site_url'].rstrip('/')+'/'+path for path in ('', 'publications/', 'teaching/', '2026/', 'teaching/data-structures/')]
         (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{esc(url)}</loc><lastmod>{esc(SITE["updated"])}</lastmod></url>' for url in urls)+'</urlset>')
         (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+SITE['site_url'].rstrip('/')+'/sitemap.xml\n')
     print(f'Built homepage, publication archive ({len(records)} entries), course page, and 404 page.')
