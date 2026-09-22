@@ -170,7 +170,7 @@ def paper(record, featured=False):
     return f'<article class="publication" id="{esc(record["id"])}"><div class="venue">{venue(record)}</div><div class="pub-body">{highlight_html}<h3>{title_html}</h3>{classification_html(record)}<p class="authors">{authors_html(record)}</p>{authorship_html(record)}{full_html}{status_html}{summary}<div class="pub-links">{links}</div>{citation}</div></article>'
 
 def frame(body, title, depth='', current='home', page_path=''):
-    nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'teaching/data-structures/'), ('contact', '联系', depth+'index.html#contact')]
+    nav = [('research', '研究方向', depth+'index.html#research'), ('publications', '学术成果', depth+'publications/'), ('students', '学生与合作', depth+'index.html#students'), ('teaching', '教学', depth+'index.html#teaching'), ('contact', '联系', depth+'index.html#contact')]
     hidden = set()
     if not PAGE.get('research'): hidden.add('research')
     if not has_text(PAGE.get('students')) and not has_text(PAGE.get('collaboration')): hidden.add('students')
@@ -227,7 +227,11 @@ def home(records):
     social = '<div class="social">' + ''.join(social_links) + '</div>' if social_links else ''
     institution = (SITE.get('affiliation_en') or '').split(',')[-1].strip().upper()
     hero = '<section class="hero"><div>' + text_element('p', institution, ' class="eyebrow"') + text_element('h1', SITE['name']) + text_element('p', SITE.get('name_en'), ' class="english-name" lang="en"') + text_element('p', SITE.get('affiliation'), ' class="affiliation"') + text_element('p', (PAGE.get('home') or {}).get('intro'), ' class="intro"') + social + '</div>' + research_index + '</section>'
-    return frame(hero + research_section + selected_section + students_section + contact(), '个人学术主页')
+    course_links = '<article><h3>数据结构</h3><p>2026 · 本科课程</p><a class="inline-link" href="teaching/data-structures/">课程介绍与学习资源 ↗</a></article>'
+    if SITE.get('nlp_course_url'):
+        course_links += '<article><h3>自然语言处理项目实践</h3><p>2026 · 文本处理、模型训练与评价，以及论文部分复现。</p><a class="inline-link" href="' + safe_url(SITE['nlp_course_url']) + '">进入课程主页 ↗</a></article>'
+    teaching_section = '<section class="section" id="teaching"><div class="section-heading"><h2>教学与学习资源</h2><span class="label">TEACHING</span></div><div class="student-grid">' + course_links + '</div></section>'
+    return frame(hero + research_section + selected_section + students_section + teaching_section + contact(), '个人学术主页')
 
 def bibliography(records):
     groups = defaultdict(list)

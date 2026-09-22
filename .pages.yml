@@ -254,6 +254,11 @@ content:
         type: string
         pattern: '^https?://[^\s]+$'
         required: true
+      - name: nlp_course_url
+        label: 自然语言处理项目实践课程网址
+        type: string
+        pattern: '^$|^https?://[^\s]+$'
+        description: 填写后在个人主页教学栏目显示课程入口。
       - name: course_url
         label: 数据结构课件网址
         type: string
